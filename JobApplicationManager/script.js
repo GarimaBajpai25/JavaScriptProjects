@@ -603,3 +603,318 @@ form.addEventListener("submit", function (event) {
     alert("Application submitted successfully!");
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const API_KEY = "YOUR_API_KEY";
+
+const cityInput = document.getElementById("cityInput");
+const searchBtn = document.getElementById("searchBtn");
+
+const weatherCard = document.getElementById("weatherCard");
+const forecastSection = document.getElementById("forecastSection");
+
+const loading = document.getElementById("loading");
+const error = document.getElementById("error");
+
+const cityName = document.getElementById("cityName");
+const temperature = document.getElementById("temperature");
+const condition = document.getElementById("condition");
+
+const humidity = document.getElementById("humidity");
+const windSpeed = document.getElementById("windSpeed");
+const feelsLike = document.getElementById("feelsLike");
+const pressure = document.getElementById("pressure");
+
+const weatherIcon = document.getElementById("weatherIcon");
+const forecastContainer = document.getElementById("forecastContainer");
+
+
+/* Search Button */
+
+searchBtn.addEventListener("click", () => {
+
+    const city = cityInput.value.trim();
+
+    if (city === "") {
+        showError("Please enter a city name.");
+        return;
+    }
+
+    getWeather(city);
+});
+
+
+/* Enter Key */
+
+cityInput.addEventListener("keypress", (event) => {
+
+    if (event.key === "Enter") {
+        searchBtn.click();
+    }
+
+});
+
+
+/* Get Weather */
+
+async function getWeather(city) {
+
+    try {
+
+        showLoading();
+
+        const currentURL =
+            `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+
+        const forecastURL =
+            `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`;
+
+        const [currentResponse, forecastResponse] =
+            await Promise.all([
+                fetch(currentURL),
+                fetch(forecastURL)
+            ]);
+
+        if (!currentResponse.ok) {
+            throw new Error("City not found");
+        }
+
+        const currentData = await currentResponse.json();
+        const forecastData = await forecastResponse.json();
+
+        displayCurrentWeather(currentData);
+        displayForecast(forecastData);
+
+        hideLoading();
+
+    } catch (error) {
+
+        hideLoading();
+
+        weatherCard.classList.add("hidden");
+        forecastSection.classList.add("hidden");
+
+        showError("City not found. Please enter a valid city.");
+
+    }
+
+}
+
+
+/* Display Current Weather */
+
+function displayCurrentWeather(data) {
+
+    weatherCard.classList.remove("hidden");
+    error.classList.add("hidden");
+
+    cityName.textContent = `${data.name}, ${data.sys.country}`;
+
+    temperature.textContent =
+        Math.round(data.main.temp);
+
+    condition.textContent =
+        capitalize(data.weather[0].description);
+
+    humidity.textContent =
+        `${data.main.humidity}%`;
+
+    windSpeed.textContent =
+        `${(data.wind.speed * 3.6).toFixed(1)} km/h`;
+
+    feelsLike.textContent =
+        `${Math.round(data.main.feels_like)}°C`;
+
+    pressure.textContent =
+        `${data.main.pressure} hPa`;
+
+    weatherIcon.textContent =
+        getWeatherIcon(data.weather[0].main);
+
+}
+
+
+/* Display Forecast */
+
+function displayForecast(data) {
+
+    forecastSection.classList.remove("hidden");
+
+    forecastContainer.innerHTML = "";
+
+    const dailyData = {};
+
+    data.list.forEach(item => {
+
+        const date = item.dt_txt.split(" ")[0];
+
+        if (!dailyData[date]) {
+            dailyData[date] = item;
+        }
+
+    });
+
+
+    Object.values(dailyData)
+        .slice(0, 5)
+        .forEach(item => {
+
+            const date =
+                new Date(item.dt * 1000);
+
+            const day =
+                date.toLocaleDateString("en-US", {
+                    weekday: "short"
+                });
+
+            const icon =
+                getWeatherIcon(item.weather[0].main);
+
+            const card =
+                document.createElement("div");
+
+            card.classList.add("forecast-card");
+
+            card.innerHTML = `
+                <h3>${day}</h3>
+
+                <div class="icon">
+                    ${icon}
+                </div>
+
+                <p>
+                    ${capitalize(item.weather[0].description)}
+                </p>
+
+                <p class="temp">
+                    ${Math.round(item.main.temp)}°C
+                </p>
+
+                <p>
+                    💧 ${item.main.humidity}%
+                </p>
+            `;
+
+            forecastContainer.appendChild(card);
+
+        });
+
+}
+
+
+/* Weather Icons */
+
+function getWeatherIcon(weather) {
+
+    const icons = {
+
+        Clear: "☀️",
+
+        Clouds: "☁️",
+
+        Rain: "🌧️",
+
+        Drizzle: "🌦️",
+
+        Thunderstorm: "⛈️",
+
+        Snow: "❄️",
+
+        Mist: "🌫️",
+
+        Smoke: "🌫️",
+
+        Haze: "🌫️",
+
+        Dust: "🌪️",
+
+        Fog: "🌫️",
+
+        Sand: "🌪️",
+
+        Ash: "🌋",
+
+        Squall: "💨",
+
+        Tornado: "🌪️"
+
+    };
+
+    return icons[weather] || "🌤️";
+
+}
+
+
+/* Capitalize Text */
+
+function capitalize(text) {
+
+    return text
+        .split(" ")
+        .map(word =>
+            word.charAt(0).toUpperCase() + word.slice(1)
+        )
+        .join(" ");
+
+}
+
+
+/* Loading */
+
+function showLoading() {
+
+    loading.classList.remove("hidden");
+
+    error.classList.add("hidden");
+
+    weatherCard.classList.add("hidden");
+
+    forecastSection.classList.add("hidden");
+
+}
+
+
+/* Hide Loading */
+
+function hideLoading() {
+
+    loading.classList.add("hidden");
+
+}
+
+
+/* Error */
+
+function showError(message) {
+
+    error.textContent = message;
+
+    error.classList.remove("hidden");
+
+}
