@@ -1,10 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Weather App</title>
+    <title>Weather Prediction</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,17 +16,12 @@
 
         <!-- Header -->
         <header>
-
-            <h1>🌤️ Weather App</h1>
-
-            <button id="themeBtn">🌙</button>
-
+            <h1>🌤️ Weather Prediction</h1>
+            <p>Check current weather and upcoming forecast</p>
         </header>
 
-
-        <!-- Search -->
-        <div class="search-box">
-
+        <!-- Search Section -->
+        <section class="search-box">
             <input
                 type="text"
                 id="cityInput"
@@ -35,169 +31,95 @@
             <button id="searchBtn">
                 Search
             </button>
-
-        </div>
-
-
-        <!-- Location Button -->
-        <button id="locationBtn" class="location-btn">
-            📍 Use My Location
-        </button>
-
+        </section>
 
         <!-- Loading -->
-        <p id="loading">
-            Loading weather...
-        </p>
-
-
-        <!-- Error -->
-        <p id="error"></p>
-
-
-        <!-- Weather Information -->
-        <div id="weatherContainer" class="weather-container">
-
-            <!-- Current Weather -->
-            <div class="current-weather">
-
-                <h2 id="cityName">
-                    City
-                </h2>
-
-                <p id="date">
-                    Date
-                </p>
-
-                <div class="weather-main">
-
-                    <div id="weatherIcon">
-                        ☀️
-                    </div>
-
-                    <div>
-                        <h3 id="temperature">
-                            --°C
-                        </h3>
-
-                        <p id="condition">
-                            Weather
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <!-- Weather Details -->
-                <div class="details">
-
-                    <div class="detail-box">
-
-                        <span>🌡️</span>
-
-                        <p>Feels Like</p>
-
-                        <strong id="feelsLike">
-                            --°C
-                        </strong>
-
-                    </div>
-
-
-                    <div class="detail-box">
-
-                        <span>💧</span>
-
-                        <p>Humidity</p>
-
-                        <strong id="humidity">
-                            --%
-                        </strong>
-
-                    </div>
-
-
-                    <div class="detail-box">
-
-                        <span>💨</span>
-
-                        <p>Wind</p>
-
-                        <strong id="wind">
-                            -- km/h
-                        </strong>
-
-                    </div>
-
-
-                    <div class="detail-box">
-
-                        <span>🌡️</span>
-
-                        <p>Pressure</p>
-
-                        <strong id="pressure">
-                            -- hPa
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Sunrise Sunset -->
-                <div class="sun-info">
-
-                    <div>
-                        🌅
-                        <span>Sunrise</span>
-                        <strong id="sunrise">
-                            --
-                        </strong>
-                    </div>
-
-                    <div>
-                        🌇
-                        <span>Sunset</span>
-                        <strong id="sunset">
-                            --
-                        </strong>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- Forecast -->
-            <div class="forecast-section">
-
-                <h2>5-Day Forecast</h2>
-
-                <div id="forecast" class="forecast">
-
-                </div>
-
-            </div>
-
-
-            <!-- Recent Searches -->
-            <div class="recent-section">
-
-                <h2>Recent Searches</h2>
-
-                <div id="recentSearches">
-
-                </div>
-
-            </div>
-
+        <div id="loading" class="loading hidden">
+            Loading weather data...
         </div>
 
-    </div>
+        <!-- Error -->
+        <div id="error" class="error hidden">
+            City not found. Please try again.
+        </div>
 
+        <!-- Current Weather -->
+        <section id="weatherCard" class="weather-card hidden">
+
+            <div class="location">
+                <h2 id="cityName">Kanpur</h2>
+                <p id="date">Today</p>
+            </div>
+
+            <div class="main-weather">
+
+                <div class="weather-icon" id="weatherIcon">
+                    ☀️
+                </div>
+
+                <div class="temperature">
+                    <span id="temperature">28</span>°C
+                </div>
+
+                <div class="condition">
+                    <p id="condition">Sunny</p>
+                </div>
+
+            </div>
+
+            <!-- Weather Details -->
+            <div class="weather-details">
+
+                <div class="detail">
+                    <span>💧</span>
+                    <h3>Humidity</h3>
+                    <p id="humidity">65%</p>
+                </div>
+
+                <div class="detail">
+                    <span>💨</span>
+                    <h3>Wind Speed</h3>
+                    <p id="windSpeed">12 km/h</p>
+                </div>
+
+                <div class="detail">
+                    <span>🌡️</span>
+                    <h3>Feels Like</h3>
+                    <p id="feelsLike">29°C</p>
+                </div>
+
+                <div class="detail">
+                    <span>📊</span>
+                    <h3>Pressure</h3>
+                    <p id="pressure">1012 hPa</p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Forecast -->
+        <section id="forecastSection" class="forecast-section hidden">
+
+            <h2>5-Day Forecast</h2>
+
+            <div id="forecastContainer" class="forecast-container">
+
+                <!-- Forecast cards generated by JavaScript -->
+
+            </div>
+
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Weather Prediction System</p>
+        </footer>
+
+    </div>
 
     <script src="script.js"></script>
 
 </body>
 </html>
+```
